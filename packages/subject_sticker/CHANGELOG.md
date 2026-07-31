@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.0.3
+
+- `eraseComponentAt` — tap-to-delete a stray blob from a cutout PNG:
+  flood-fills the 8-connected opaque component under (or near) the tap and
+  clears it to transparent. For cleaning up bits the segmentation dragged in.
+
 ## 0.0.2
 
 - `trySubjectCutoutBytes` — cutout from in-memory encoded image bytes

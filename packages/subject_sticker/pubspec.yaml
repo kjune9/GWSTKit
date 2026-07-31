@@ -3,7 +3,7 @@ description: >-
   On-device subject cutout (ML Kit Subject Segmentation) plus sticker-style
   border rendering — white margin, colored contour line, stitch dashes,
   tinted margin, rounded finishing. Pure Dart post-processing.
-version: 0.0.2
+version: 0.0.3
 homepage: https://github.com/kjune9/GWSTKit
 repository: https://github.com/kjune9/GWSTKit
 
