@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:google_mlkit_subject_segmentation/google_mlkit_subject_segmentation.dart';
 
@@ -49,5 +50,32 @@ Future<CutoutResult> trySubjectCutout(String filePath) async {
     return CutoutResult(error: '$e', elapsedMs: sw.elapsedMilliseconds);
   } finally {
     segmenter.close();
+  }
+}
+
+/// Same as [trySubjectCutout] but takes encoded image bytes (JPEG/PNG).
+///
+/// ML Kit only accepts a file path for encoded images, so the bytes are
+/// written to a temp file first and removed afterwards. Use this when the
+/// image only exists in memory (e.g. rotated/re-encoded after picking).
+/// On Android, `Directory.systemTemp` resolves to the app cache dir.
+Future<CutoutResult> trySubjectCutoutBytes(Uint8List bytes) async {
+  if (!subjectCutoutSupported) {
+    return const CutoutResult(error: 'unsupported platform');
+  }
+  File? tmp;
+  try {
+    tmp = File(
+      '${Directory.systemTemp.path}/subject_sticker_'
+      '${DateTime.now().microsecondsSinceEpoch}.img',
+    );
+    await tmp.writeAsBytes(bytes, flush: true);
+    return await trySubjectCutout(tmp.path);
+  } catch (e) {
+    return CutoutResult(error: '$e');
+  } finally {
+    try {
+      await tmp?.delete();
+    } catch (_) {}
   }
 }

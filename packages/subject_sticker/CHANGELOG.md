@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.0.2
+
+- `trySubjectCutoutBytes` — cutout from in-memory encoded image bytes
+  (writes a temp file for ML Kit, cleans up afterwards). Useful when the
+  image was re-encoded after picking (e.g. rotation).
+
 ## 0.0.1
 
 - Initial extraction from JipCook.

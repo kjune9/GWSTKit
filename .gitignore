@@ -3,3 +3,6 @@ build/
 pubspec.lock
 *.iml
 .idea/
+
+# Generated per-machine plugin registry (contains local paths)
+.flutter-plugins-dependencies
