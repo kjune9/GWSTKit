@@ -34,6 +34,33 @@ final sticker = await compute(
 // `sticker` is a transparent PNG, ready to display or upload.
 ```
 
+### Fixing the cutout by tapping
+
+Segmentation isn't perfect in either direction, so there are two tap-to-fix
+helpers (both pure Dart; run them through `compute`):
+
+```dart
+// Too much came through — a scrap of foil, a corner of the table:
+// tap it to delete that connected blob.
+final cleaned = await compute(
+  eraseComponentAt,
+  EraseComponentRequest(cutoutPng, x: tapX, y: tapY),
+);
+
+// Too much was cut away — an empty plate rim is the classic case:
+// tap the missing part to bring it back from the original photo.
+// A seed-color flood fill restores the similar-colored surface and stops
+// on its own at color boundaries (plate edge against a wooden table).
+final restored = await compute(
+  restoreRegionAt,
+  RestoreRegionRequest(cutoutPng, originalPhotoBytes, x: tapX, y: tapY),
+);
+```
+
+Both return the updated PNG, or `null` when there was nothing to do at that
+tap. For a "ghost" UI, draw the original photo at low opacity underneath the
+cutout so the user can see what's missing before tapping.
+
 Typical timings on a 2025 mid/high-end phone, 1600px photo:
 segmentation ~0.9 s, stickerize ~1 s.
 

@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.0.4
+
+- `restoreRegionAt` — tap-to-bring-back a region the segmentation cut away
+  (the inverse of `eraseComponentAt`). Copies pixels back from the original
+  photo via a seed-color flood fill: similar-colored surfaces (an empty plate
+  rim) return in one tap, and the fill stops on its own at color boundaries.
+  Handles EXIF orientation and resolution mismatches between the original
+  and the cutout, and softens the restored edge by one pixel.
+  Transparent pockets fully enclosed by the restored region (specular
+  glints, embossed-pattern highlights) are filled regardless of color —
+  without this a glossy surface comes back perforated. Open surroundings
+  always touch the region's outside and are never filled.
+- `applyStroke` — brush strokes as the precision counterpart to the tap
+  tools: restore (copy back from the original) or erase exactly the pixels
+  under a finger-drawn polyline, no color rules. The tap flood cannot reach
+  thin edge bands where colors shift, and the blob erase cannot trim a
+  piece fused to the subject — the brush covers both. Soft rim on the
+  stroke boundary.
+
 ## 0.0.3
 
 - `eraseComponentAt` — tap-to-delete a stray blob from a cutout PNG:
