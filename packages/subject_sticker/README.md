@@ -1,9 +1,10 @@
 # subject_sticker
 
-On-device **subject cutout** (ML Kit Subject Segmentation) plus pure-Dart
-**sticker-style border rendering** — turn any photo into a die-cut sticker:
-white (or tinted) margin, colored contour line, stitch dashes, rounded
-finishing everywhere (including subjects clipped by the photo edge).
+On-device **subject cutout** (Android: ML Kit Subject Segmentation / iOS:
+Vision foreground instance mask) plus pure-Dart **sticker-style border
+rendering** — turn any photo into a die-cut sticker: white (or tinted)
+margin, colored contour line, stitch dashes, rounded finishing everywhere
+(including subjects clipped by the photo edge).
 
 Extracted from [JipCook](https://jipcook.pages.dev), where it turns family
 cooking photos into stickers. Pre-1.0: the API may still move.
@@ -14,7 +15,7 @@ cooking photos into stickers. Pre-1.0: the API may still move.
 import 'package:flutter/foundation.dart' show compute;
 import 'package:subject_sticker/subject_sticker.dart';
 
-// 1) Cut the subject out of a photo file (Android, on-device, free).
+// 1) Cut the subject out of a photo file (on-device, free).
 final cut = await trySubjectCutout(photo.path);
 if (!cut.ok) {
   // cut.error explains why (unsupported platform, model still downloading…)
@@ -79,12 +80,20 @@ Sideloaded builds fetch the model on first use instead; that first call fails
 with a "waiting for the module to be downloaded" error until Play Services
 finishes (usually 1–2 minutes).
 
+## iOS setup
+
+None. The Vision model ships with the OS. Cutout requires **iOS 17+ at
+runtime** (`VNGenerateForegroundInstanceMaskRequest`); on older versions
+`subjectCutoutSupported` is `false` and `trySubjectCutout` returns an
+"unsupported platform" result, so gate your UI on the flag. The plugin's
+minimum deployment target is 13.0.
+
 ## Platform support
 
 | Platform | Cutout | Stickerize |
 |----------|--------|------------|
-| Android  | ✅ ML Kit (on-device) | ✅ |
-| iOS      | 🔜 planned (VisionKit subject lifting) | ✅ |
+| Android  | ✅ ML Kit (on-device, minSdk 24) | ✅ |
+| iOS      | ✅ Vision (on-device, iOS 17+ at runtime) | ✅ |
 | Web/desktop | ❌ stub (`subjectCutoutSupported == false`) | ✅ |
 
 `stickerize` is pure Dart (`image` package only) — it runs anywhere Dart runs,

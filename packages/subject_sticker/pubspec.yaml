@@ -1,9 +1,9 @@
 name: subject_sticker
 description: >-
-  On-device subject cutout (ML Kit Subject Segmentation) plus sticker-style
-  border rendering — white margin, colored contour line, stitch dashes,
-  tinted margin, rounded finishing. Pure Dart post-processing.
-version: 0.0.4
+  On-device subject cutout (Android ML Kit Subject Segmentation, iOS Vision
+  foreground instance mask) plus sticker-style border rendering — white margin,
+  colored contour line, stitch dashes, tinted margin, rounded finishing.
+version: 0.1.0
 homepage: https://github.com/kjune9/GWSTKit
 repository: https://github.com/kjune9/GWSTKit
 
@@ -14,8 +14,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  # On-device subject segmentation (Android; beta plugin). Requires minSdk 24.
-  google_mlkit_subject_segmentation: ^0.0.2
   # Pure-Dart image decode/encode for the sticker post-processing.
   image: ^4.2.0
 
@@ -23,3 +21,12 @@ dev_dependencies:
   flutter_lints: ^5.0.0
   flutter_test:
     sdk: flutter
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: com.gwsticktogether.subject_sticker
+        pluginClass: SubjectStickerPlugin
+      ios:
+        pluginClass: SubjectStickerPlugin

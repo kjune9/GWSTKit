@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.1.0
+
+- **iOS subject cutout** — `trySubjectCutout` now works on iOS 17+ via the
+  Vision foreground instance mask (`VNGenerateForegroundInstanceMaskRequest`).
+  No setup needed; the model ships with the OS. Older iOS versions report
+  `subjectCutoutSupported == false` so existing fallbacks keep working.
+- **Converted to a platform plugin** — the package now carries its own native
+  code (Kotlin on Android, Swift on iOS, method channel `subject_sticker`)
+  and no longer depends on the `google_mlkit_*` Dart plugins. Android still
+  uses ML Kit Subject Segmentation via Play Services under the hood; behavior
+  and the public Dart API are unchanged.
+  - Why: the ML Kit Dart plugin's iOS side is a stub that cannot cut out
+    subjects, yet it dragged the full MLKitVision framework into iOS builds —
+    forcing a 15.5 minimum deployment target and (having no arm64 simulator
+    slice) breaking iOS simulator builds on Apple Silicon Macs. All three go
+    away with this release: iOS deployment target can be as low as 13.0.
+- iOS plugin ships in the dual CocoaPods + Swift Package Manager layout.
+
 ## 0.0.4
 
 - `restoreRegionAt` — tap-to-bring-back a region the segmentation cut away
