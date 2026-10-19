@@ -6,3 +6,6 @@ pubspec.lock
 
 # Generated per-machine plugin registry (contains local paths)
 .flutter-plugins-dependencies
+
+# Gradle build cache
+.gradle/
